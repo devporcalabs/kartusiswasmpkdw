@@ -7,10 +7,14 @@ if (isset($_GET['action']) && $_GET['action'] === 'approve') {
     header('Content-Type: application/json');
     try {
         $nisn = trim($_POST['nisn'] ?? '');
+        $nama = trim($_POST['nama_lengkap'] ?? '');
         $photoPath = trim($_POST['photo_path'] ?? '');
 
-        if ($nisn === '' || $photoPath === '') {
-            throw new Exception("NISN atau Jalur Foto tidak valid.");
+        if ($photoPath === '') {
+            throw new Exception("Jalur Foto tidak valid.");
+        }
+        if ($nisn === '' && $nama === '') {
+            throw new Exception("Identitas siswa tidak valid.");
         }
 
         // 1. Update photo_map.json
@@ -19,12 +23,22 @@ if (isset($_GET['action']) && $_GET['action'] === 'approve') {
         if (file_exists($photoMapFile)) {
             $photoMap = json_decode(file_get_contents($photoMapFile), true) ?: [];
         }
-        $photoMap[$nisn] = $photoPath;
+        
+        if ($nisn !== '') {
+            $photoMap[$nisn] = $photoPath;
+        } else {
+            $photoMap[$nama] = $photoPath;
+        }
         file_put_contents($photoMapFile, json_encode($photoMap, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
         // 2. Update Database MySQL
-        $stmt = $pdo->prepare("UPDATE `students` SET `photo_path` = ? WHERE `nisn` = ?");
-        $stmt->execute([$photoPath, $nisn]);
+        if ($nisn !== '') {
+            $stmt = $pdo->prepare("UPDATE `students` SET `photo_path` = ? WHERE `nisn` = ?");
+            $stmt->execute([$photoPath, $nisn]);
+        } else {
+            $stmt = $pdo->prepare("UPDATE `students` SET `photo_path` = ? WHERE `nama_lengkap` = ?");
+            $stmt->execute([$photoPath, $nama]);
+        }
 
         echo json_encode(['success' => true, 'message' => 'Foto berhasil disetujui dan diperbarui.']);
     } catch (Exception $e) {
@@ -479,7 +493,11 @@ foreach ($students as $s) {
                   </div>
                   <div class="similarity-info <?= $colorClass ?>-text">Kemiripan: <?= $r['percent'] ?>%</div>
                   
-                  <button class="acc-btn" onclick="approvePhoto(this, '<?= htmlspecialchars($s['nisn']) ?>', '<?= htmlspecialchars($r['path']) ?>')">
+                  <button class="acc-btn" 
+                          data-nisn="<?= htmlspecialchars($s['nisn'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                          data-nama="<?= htmlspecialchars($s['nama_lengkap'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                          data-path="<?= htmlspecialchars($r['path'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                          onclick="approvePhoto(this)">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
                     Setujui (ACC)
                   </button>
@@ -509,7 +527,11 @@ function filterList() {
   });
 }
 
-function approvePhoto(btn, nisn, photoPath) {
+function approvePhoto(btn) {
+  const nisn = btn.dataset.nisn;
+  const nama = btn.dataset.nama;
+  const photoPath = btn.dataset.path;
+
   if (!confirm("Apakah Anda yakin ingin menyetujui foto ini?")) return;
 
   btn.disabled = true;
@@ -517,6 +539,7 @@ function approvePhoto(btn, nisn, photoPath) {
 
   const formData = new FormData();
   formData.append('nisn', nisn);
+  formData.append('nama_lengkap', nama);
   formData.append('photo_path', photoPath);
 
   fetch('photo_similarity.php?action=approve', {

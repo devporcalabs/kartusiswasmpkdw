@@ -124,8 +124,10 @@ try {
 
             // Tentukan photo_path
             $photoPath = '';
-            if (isset($photoMap[$nisn])) {
+            if (!empty($nisn) && isset($photoMap[$nisn])) {
                 $photoPath = $photoMap[$nisn];
+            } elseif (isset($photoMap[$nama])) {
+                $photoPath = $photoMap[$nama];
             } else {
                 // Fallback dinamis jika tidak ada di JSON map
                 // Menggunakan folder kelas yang di-resolve
