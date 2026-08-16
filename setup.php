@@ -34,7 +34,7 @@ try {
     $sql = "CREATE TABLE IF NOT EXISTS `students` (
         `id` INT AUTO_INCREMENT PRIMARY KEY,
         `nis` VARCHAR(50) DEFAULT NULL,
-        `nisn` VARCHAR(50) UNIQUE NOT NULL,
+        `nisn` VARCHAR(50) UNIQUE DEFAULT NULL,
         `nama_lengkap` VARCHAR(255) NOT NULL,
         `nomor_ortu` VARCHAR(50) DEFAULT NULL,
         `jenis_kelamin` VARCHAR(50) DEFAULT NULL,
@@ -48,6 +48,7 @@ try {
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
     
     $pdo->exec($sql);
+    $pdo->exec("ALTER TABLE `students` MODIFY `nisn` VARCHAR(50) UNIQUE DEFAULT NULL");
     echo "Tabel <span class='success-text'>students</span> berhasil diperiksa/dibuat.<br>";
 
     // Kosongkan tabel untuk menghindari duplikasi saat inisialisasi ulang
@@ -116,10 +117,9 @@ try {
             $alamat = isset($colMap['Alamat Lengkap']) ? trim($data[$colMap['Alamat Lengkap']]) : '';
             $kelas = isset($colMap['Kelas']) ? trim($data[$colMap['Kelas']]) : '';
 
-            // Lewati jika NISN kosong
+            // Jika NISN kosong, ubah jadi NULL agar bisa masuk kolom UNIQUE
             if (empty($nisn)) {
-                echo "Baris ke-{$rowNumber}: <span class='error-text'>Lewati karena NISN kosong.</span><br>";
-                continue;
+                $nisn = null;
             }
 
             // Tentukan photo_path

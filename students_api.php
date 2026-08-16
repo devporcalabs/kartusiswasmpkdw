@@ -108,24 +108,26 @@ try {
             $kelas = trim($_POST['kelas'] ?? '');
             
             if ($nisn === '') {
-                throw new Exception("NISN wajib diisi.");
+                $nisn = null;
             }
             if ($nama === '') {
                 throw new Exception("Nama Lengkap wajib diisi.");
             }
             
-            // Periksa apakah NISN duplikat (khusus untuk data baru, atau jika NISN diedit)
-            if ($id === 0) {
-                $checkStmt = $pdo->prepare("SELECT COUNT(*) FROM `students` WHERE `nisn` = ?");
-                $checkStmt->execute([$nisn]);
-                if ($checkStmt->fetchColumn() > 0) {
-                    throw new Exception("NISN '{$nisn}' sudah digunakan oleh siswa lain.");
-                }
-            } else {
-                $checkStmt = $pdo->prepare("SELECT COUNT(*) FROM `students` WHERE `nisn` = ? AND `id` != ?");
-                $checkStmt->execute([$nisn, $id]);
-                if ($checkStmt->fetchColumn() > 0) {
-                    throw new Exception("NISN '{$nisn}' sudah digunakan oleh siswa lain.");
+            // Periksa apakah NISN duplikat (khusus jika NISN tidak kosong)
+            if ($nisn !== null) {
+                if ($id === 0) {
+                    $checkStmt = $pdo->prepare("SELECT COUNT(*) FROM `students` WHERE `nisn` = ?");
+                    $checkStmt->execute([$nisn]);
+                    if ($checkStmt->fetchColumn() > 0) {
+                        throw new Exception("NISN '{$nisn}' sudah digunakan oleh siswa lain.");
+                    }
+                } else {
+                    $checkStmt = $pdo->prepare("SELECT COUNT(*) FROM `students` WHERE `nisn` = ? AND `id` != ?");
+                    $checkStmt->execute([$nisn, $id]);
+                    if ($checkStmt->fetchColumn() > 0) {
+                        throw new Exception("NISN '{$nisn}' sudah digunakan oleh siswa lain.");
+                    }
                 }
             }
             

@@ -178,8 +178,8 @@ require_once 'config.php';
         </div>
         
         <div class="form-group">
-          <label for="studentNisn">NISN <span class="required">*</span></label>
-          <input type="text" name="nisn" id="studentNisn" placeholder="Contoh: 3134122158" required />
+          <label for="studentNisn">NISN</label>
+          <input type="text" name="nisn" id="studentNisn" placeholder="Contoh: 3134122158" />
         </div>
       </div>
 
