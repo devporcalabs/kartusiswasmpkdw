@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generator Kartu Pelajar – SMPN 1 Kedungwaringin</title>
+  <meta name="description" content="Generator Kartu Pelajar SMPN 1 Kedungwaringin – cetak kartu pelajar siswa dengan QR Code dari NISN." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <!-- QR Code library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- PapaParse for CSV -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <!-- html2canvas for capturing elements -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- JSZip for packaging files -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ===== APP SHELL ===== -->
+<div class="app-shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="LogoSMPN1KDW.webp" alt="Logo SMPN 1 KDW" class="sidebar-logo" />
+      <div>
+        <div class="sidebar-title">SMPN 1</div>
+        <div class="sidebar-subtitle">Kedungwaringin</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <label class="sidebar-label">Cari Siswa</label>
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="searchInput" placeholder="Nama atau NISN…" class="search-input" />
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <label class="sidebar-label">Filter Kelas</label>
+      <select id="kelasFilter" class="filter-select">
+        <option value="">Semua Kelas</option>
+      </select>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-num" id="statTotal">–</span>
+          <span class="stat-lbl">Total Siswa</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="statFiltered">–</span>
+          <span class="stat-lbl">Ditampilkan</span>
+        </div>
+        <div class="stat-card stat-card--warning">
+          <span class="stat-num" id="statIncomplete">–</span>
+          <span class="stat-lbl">Tdk Lengkap</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <button id="btnPrintAll" class="btn-sidebar btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Unduh Semua (ZIP)
+      </button>
+      <button id="btnPrintSelected" class="btn-sidebar btn-outline" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Unduh Terpilih (<span id="selectedCount">0</span>)
+      </button>
+    </div>
+
+    <div class="sidebar-footer">
+      <span>Generator Kartu Pelajar</span>
+      <span class="sidebar-version">v1.0</span>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main-content">
+
+    <!-- Top bar -->
+    <div class="topbar">
+      <div class="topbar-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="topbar-icon"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        Generator Kartu Pelajar
+      </div>
+      <div class="topbar-actions">
+        <label class="toggle-label">
+          <input type="checkbox" id="showBack" /> Tampilkan Sisi Belakang
+        </label>
+        <label class="toggle-label">
+          <input type="checkbox" id="selectMode" /> Mode Pilih
+        </label>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div id="loadingState" class="loading-state">
+      <div class="loader"></div>
+      <p>Memuat data siswa…</p>
+    </div>
+
+    <!-- Empty state -->
+    <div id="emptyState" class="empty-state" style="display:none">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <p>Tidak ada siswa ditemukan</p>
+    </div>
+
+    <!-- Cards grid -->
+    <div class="cards-grid" id="cardsGrid"></div>
+
+  </main>
+</div>
+
+<!-- ===== PRINT AREA ===== -->
+<div id="printArea" class="print-area"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

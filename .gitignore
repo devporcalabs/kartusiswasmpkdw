@@ -1,0 +1,10 @@
+# Backups
+*.bak
+_tools_and_raw_data/*.bak
+
+# IDE / System files
+.gemini/
+.idea/
+.vscode/
+Thumbs.db
+.DS_Store
