@@ -89,7 +89,7 @@ try {
         // NIS,NISN,Nama Lengkap,Nomor orang tua (wajib diawali 62),Jenis Kelamin,Tempat Tanggal Lahir,Agama,Alamat Lengkap,Kelas
         $colMap = [];
         foreach ($headers as $index => $name) {
-            $colMap[trim($name)] = $index;
+            $colMap[strtolower(trim($name))] = $index;
         }
 
         $stmt = $pdo->prepare("INSERT INTO `students` (
@@ -103,19 +103,29 @@ try {
         $insertedCount = 0;
         $rowNumber = 1;
 
+        $getCol = function($keys) use ($colMap, &$data) {
+            foreach ($keys as $k) {
+                $lk = strtolower(trim($k));
+                if (isset($colMap[$lk])) {
+                    return trim($data[$colMap[$lk]]);
+                }
+            }
+            return '';
+        };
+
         while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
             $rowNumber++;
             
             // Dapatkan value berdasarkan header map
-            $nis = isset($colMap['NIS']) ? trim($data[$colMap['NIS']]) : '';
-            $nisn = isset($colMap['NISN']) ? trim($data[$colMap['NISN']]) : '';
-            $nama = isset($colMap['Nama Lengkap']) ? trim($data[$colMap['Nama Lengkap']]) : '';
-            $nomor_ortu = isset($colMap['Nomor orang tua (wajib diawali 62)']) ? trim($data[$colMap['Nomor orang tua (wajib diawali 62)']]) : '';
-            $jk = isset($colMap['Jenis Kelamin']) ? trim($data[$colMap['Jenis Kelamin']]) : '';
-            $ttl = isset($colMap['Tempat Tanggal Lahir']) ? trim($data[$colMap['Tempat Tanggal Lahir']]) : '';
-            $agama = isset($colMap['Agama']) ? trim($data[$colMap['Agama']]) : '';
-            $alamat = isset($colMap['Alamat Lengkap']) ? trim($data[$colMap['Alamat Lengkap']]) : '';
-            $kelas = isset($colMap['Kelas']) ? trim($data[$colMap['Kelas']]) : '';
+            $nis = $getCol(['nis', 'NIS']);
+            $nisn = $getCol(['nisn', 'NISN']);
+            $nama = $getCol(['nama_lengkap', 'Nama Lengkap']);
+            $nomor_ortu = $getCol(['nomor_ortu', 'Nomor orang tua (wajib diawali 62)']);
+            $jk = $getCol(['jenis_kelamin', 'Jenis Kelamin']);
+            $ttl = $getCol(['tempat_tanggal_lahir', 'Tempat Tanggal Lahir']);
+            $agama = $getCol(['agama', 'Agama']);
+            $alamat = $getCol(['alamat_lengkap', 'Alamat Lengkap']);
+            $kelas = $getCol(['kelas', 'Kelas']);
 
             // Jika NISN kosong, ubah jadi NULL agar bisa masuk kolom UNIQUE
             if (empty($nisn)) {
