@@ -46,29 +46,24 @@ try {
             }
             
             // Filter Kelas & Kelengkapan Data
-            if ($kelas === '__TIDAK_LENGKAP__') {
-                // Tampilkan yang data kontaknya kurang
-                $query .= " AND (nomor_ortu IS NULL OR nomor_ortu = '' 
-                             OR tempat_tanggal_lahir IS NULL OR tempat_tanggal_lahir = '' 
-                             OR alamat_lengkap IS NULL OR alamat_lengkap = ''
-                             OR nisn IS NULL OR nisn = ''
-                             OR photo_path IS NULL OR photo_path = '')";
+            $condDataComplete = "(nomor_ortu IS NOT NULL AND nomor_ortu != '' AND tempat_tanggal_lahir IS NOT NULL AND tempat_tanggal_lahir != '' AND alamat_lengkap IS NOT NULL AND alamat_lengkap != '' AND nisn IS NOT NULL AND nisn != '')";
+            $condDataIncomplete = "(nomor_ortu IS NULL OR nomor_ortu = '' OR tempat_tanggal_lahir IS NULL OR tempat_tanggal_lahir = '' OR alamat_lengkap IS NULL OR alamat_lengkap = '' OR nisn IS NULL OR nisn = '')";
+            $condHasPhoto = "(photo_path IS NOT NULL AND photo_path != '')";
+            $condNoPhoto = "(photo_path IS NULL OR photo_path = '')";
+
+            if ($kelas === '__NO_PHOTO_DATA_COMPLETE__') {
+                $query .= " AND $condNoPhoto AND $condDataComplete";
+            } elseif ($kelas === '__HAS_PHOTO_DATA_INCOMPLETE__') {
+                $query .= " AND $condHasPhoto AND $condDataIncomplete";
+            } elseif ($kelas === '__NO_PHOTO_DATA_INCOMPLETE__') {
+                $query .= " AND $condNoPhoto AND $condDataIncomplete";
             } elseif ($kelas !== '') {
                 // Filter kelas tertentu, hanya yang LENGKAP
-                $query .= " AND `kelas` = :kelas 
-                            AND (nomor_ortu IS NOT NULL AND nomor_ortu != '')
-                            AND (tempat_tanggal_lahir IS NOT NULL AND tempat_tanggal_lahir != '')
-                            AND (alamat_lengkap IS NOT NULL AND alamat_lengkap != '')
-                            AND (nisn IS NOT NULL AND nisn != '')
-                            AND (photo_path IS NOT NULL AND photo_path != '')";
+                $query .= " AND `kelas` = :kelas AND $condHasPhoto AND $condDataComplete";
                 $params[':kelas'] = $kelas;
             } else {
                 // Semua kelas, hanya yang LENGKAP
-                $query .= " AND (nomor_ortu IS NOT NULL AND nomor_ortu != '')
-                            AND (tempat_tanggal_lahir IS NOT NULL AND tempat_tanggal_lahir != '')
-                            AND (alamat_lengkap IS NOT NULL AND alamat_lengkap != '')
-                            AND (nisn IS NOT NULL AND nisn != '')
-                            AND (photo_path IS NOT NULL AND photo_path != '')";
+                $query .= " AND $condHasPhoto AND $condDataComplete";
             }
             
             $query .= " ORDER BY `nama_lengkap` ASC";
@@ -81,13 +76,11 @@ try {
             // 1. Total Siswa
             $totalSiswa = $pdo->query("SELECT COUNT(*) FROM `students`")->fetchColumn();
             
-            // 2. Total Incomplete Siswa
-            $totalIncomplete = $pdo->query("SELECT COUNT(*) FROM `students` WHERE 
-                nomor_ortu IS NULL OR nomor_ortu = '' 
-                OR tempat_tanggal_lahir IS NULL OR tempat_tanggal_lahir = '' 
-                OR alamat_lengkap IS NULL OR alamat_lengkap = ''
-                OR nisn IS NULL OR nisn = ''
-                OR photo_path IS NULL OR photo_path = ''")->fetchColumn();
+            // 2. Total Incomplete Siswa dengan Breakdown Kategori
+            $c1 = $pdo->query("SELECT COUNT(*) FROM `students` WHERE $condNoPhoto AND $condDataComplete")->fetchColumn();
+            $c2 = $pdo->query("SELECT COUNT(*) FROM `students` WHERE $condHasPhoto AND $condDataIncomplete")->fetchColumn();
+            $c3 = $pdo->query("SELECT COUNT(*) FROM `students` WHERE $condNoPhoto AND $condDataIncomplete")->fetchColumn();
+            $totalIncomplete = $c1 + $c2 + $c3;
                 
             echo json_encode([
                 'success' => true,
@@ -95,6 +88,9 @@ try {
                 'stats' => [
                     'total' => (int)$totalSiswa,
                     'incomplete' => (int)$totalIncomplete,
+                    'no_photo_data_complete' => (int)$c1,
+                    'has_photo_data_incomplete' => (int)$c2,
+                    'no_photo_data_incomplete' => (int)$c3
                 ]
             ]);
             break;

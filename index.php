@@ -61,10 +61,21 @@ require_once 'config.php';
         ?>
         <?php
         try {
-            $incompleteCount = $pdo->query("SELECT COUNT(*) FROM `students` WHERE nomor_ortu IS NULL OR nomor_ortu = '' OR tempat_tanggal_lahir IS NULL OR tempat_tanggal_lahir = '' OR alamat_lengkap IS NULL OR alamat_lengkap = '' OR nisn IS NULL OR nisn = '' OR photo_path IS NULL OR photo_path = ''")->fetchColumn();
-            if ($incompleteCount > 0) {
+            $condDataComplete = "(nomor_ortu IS NOT NULL AND nomor_ortu != '' AND tempat_tanggal_lahir IS NOT NULL AND tempat_tanggal_lahir != '' AND alamat_lengkap IS NOT NULL AND alamat_lengkap != '' AND nisn IS NOT NULL AND nisn != '')";
+            $condDataIncomplete = "(nomor_ortu IS NULL OR nomor_ortu = '' OR tempat_tanggal_lahir IS NULL OR tempat_tanggal_lahir = '' OR alamat_lengkap IS NULL OR alamat_lengkap = '' OR nisn IS NULL OR nisn = '')";
+            $condHasPhoto = "(photo_path IS NOT NULL AND photo_path != '')";
+            $condNoPhoto = "(photo_path IS NULL OR photo_path = '')";
+
+            $c1 = $pdo->query("SELECT COUNT(*) FROM `students` WHERE $condNoPhoto AND $condDataComplete")->fetchColumn();
+            $c2 = $pdo->query("SELECT COUNT(*) FROM `students` WHERE $condHasPhoto AND $condDataIncomplete")->fetchColumn();
+            $c3 = $pdo->query("SELECT COUNT(*) FROM `students` WHERE $condNoPhoto AND $condDataIncomplete")->fetchColumn();
+            $totalIncomplete = $c1 + $c2 + $c3;
+
+            if ($totalIncomplete > 0) {
                 echo "<option disabled>──────────────</option>";
-                echo "<option value='__TIDAK_LENGKAP__' style='color: #ef4444; font-weight: bold;'>⚠ Data Tidak Lengkap ($incompleteCount)</option>";
+                echo "<option value='__NO_PHOTO_DATA_COMPLETE__' style='color: #f59e0b; font-weight: bold;'>⚠ Foto (-) , Data (+) ($c1)</option>";
+                echo "<option value='__HAS_PHOTO_DATA_INCOMPLETE__' style='color: #f59e0b; font-weight: bold;'>⚠ Foto (+) , Data (-) ($c2)</option>";
+                echo "<option value='__NO_PHOTO_DATA_INCOMPLETE__' style='color: #ef4444; font-weight: bold;'>⚠ Foto (-) , Data (-) ($c3)</option>";
             }
         } catch (PDOException $e) {
             // Lewati jika error
@@ -84,9 +95,14 @@ require_once 'config.php';
           <span class="stat-num" id="statFiltered">–</span>
           <span class="stat-lbl">Ditampilkan</span>
         </div>
-        <div class="stat-card stat-card--warning">
+        <div class="stat-card stat-card--warning" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80px; padding: 10px;">
           <span class="stat-num" id="statIncomplete">–</span>
-          <span class="stat-lbl">Tdk Lengkap</span>
+          <span class="stat-lbl" style="margin-bottom: 5px;">Tdk Lengkap</span>
+          <div class="stat-breakdown" style="font-size: 10px; text-align: left; width: 100%; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 5px; opacity: 0.9;">
+            <div style="display: flex; justify-content: space-between;"><span>Foto (-), Data (+):</span><strong id="statNoPhotoDataComplete">0</strong></div>
+            <div style="display: flex; justify-content: space-between;"><span>Foto (+), Data (-):</span><strong id="statHasPhotoDataIncomplete">0</strong></div>
+            <div style="display: flex; justify-content: space-between;"><span>Foto (-), Data (-):</span><strong id="statNoPhotoDataIncomplete">0</strong></div>
+          </div>
         </div>
       </div>
     </div>

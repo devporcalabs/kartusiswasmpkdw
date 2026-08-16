@@ -100,6 +100,15 @@ function fetchStudents() {
         statTotal.textContent = res.stats.total;
         statFiltered.textContent = filteredStudents.length;
         if (statIncomplete) statIncomplete.textContent = res.stats.incomplete;
+        if (document.getElementById('statNoPhotoDataComplete')) {
+          document.getElementById('statNoPhotoDataComplete').textContent = res.stats.no_photo_data_complete;
+        }
+        if (document.getElementById('statHasPhotoDataIncomplete')) {
+          document.getElementById('statHasPhotoDataIncomplete').textContent = res.stats.has_photo_data_incomplete;
+        }
+        if (document.getElementById('statNoPhotoDataIncomplete')) {
+          document.getElementById('statNoPhotoDataIncomplete').textContent = res.stats.no_photo_data_incomplete;
+        }
         
         renderCards();
       } else {
