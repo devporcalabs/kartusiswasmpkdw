@@ -61,7 +61,7 @@ require_once 'config.php';
         ?>
         <?php
         try {
-            $incompleteCount = $pdo->query("SELECT COUNT(*) FROM `students` WHERE nomor_ortu IS NULL OR nomor_ortu = '' OR tempat_tanggal_lahir IS NULL OR tempat_tanggal_lahir = '' OR alamat_lengkap IS NULL OR alamat_lengkap = ''")->fetchColumn();
+            $incompleteCount = $pdo->query("SELECT COUNT(*) FROM `students` WHERE nomor_ortu IS NULL OR nomor_ortu = '' OR tempat_tanggal_lahir IS NULL OR tempat_tanggal_lahir = '' OR alamat_lengkap IS NULL OR alamat_lengkap = '' OR nisn IS NULL OR nisn = '' OR photo_path IS NULL OR photo_path = ''")->fetchColumn();
             if ($incompleteCount > 0) {
                 echo "<option disabled>──────────────</option>";
                 echo "<option value='__TIDAK_LENGKAP__' style='color: #ef4444; font-weight: bold;'>⚠ Data Tidak Lengkap ($incompleteCount)</option>";

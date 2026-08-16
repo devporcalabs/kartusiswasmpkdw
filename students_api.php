@@ -50,19 +50,25 @@ try {
                 // Tampilkan yang data kontaknya kurang
                 $query .= " AND (nomor_ortu IS NULL OR nomor_ortu = '' 
                              OR tempat_tanggal_lahir IS NULL OR tempat_tanggal_lahir = '' 
-                             OR alamat_lengkap IS NULL OR alamat_lengkap = '')";
+                             OR alamat_lengkap IS NULL OR alamat_lengkap = ''
+                             OR nisn IS NULL OR nisn = ''
+                             OR photo_path IS NULL OR photo_path = '')";
             } elseif ($kelas !== '') {
                 // Filter kelas tertentu, hanya yang LENGKAP
                 $query .= " AND `kelas` = :kelas 
                             AND (nomor_ortu IS NOT NULL AND nomor_ortu != '')
                             AND (tempat_tanggal_lahir IS NOT NULL AND tempat_tanggal_lahir != '')
-                            AND (alamat_lengkap IS NOT NULL AND alamat_lengkap != '')";
+                            AND (alamat_lengkap IS NOT NULL AND alamat_lengkap != '')
+                            AND (nisn IS NOT NULL AND nisn != '')
+                            AND (photo_path IS NOT NULL AND photo_path != '')";
                 $params[':kelas'] = $kelas;
             } else {
                 // Semua kelas, hanya yang LENGKAP
                 $query .= " AND (nomor_ortu IS NOT NULL AND nomor_ortu != '')
                             AND (tempat_tanggal_lahir IS NOT NULL AND tempat_tanggal_lahir != '')
-                            AND (alamat_lengkap IS NOT NULL AND alamat_lengkap != '')";
+                            AND (alamat_lengkap IS NOT NULL AND alamat_lengkap != '')
+                            AND (nisn IS NOT NULL AND nisn != '')
+                            AND (photo_path IS NOT NULL AND photo_path != '')";
             }
             
             $query .= " ORDER BY `nama_lengkap` ASC";
