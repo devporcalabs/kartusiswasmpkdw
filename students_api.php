@@ -79,7 +79,9 @@ try {
             $totalIncomplete = $pdo->query("SELECT COUNT(*) FROM `students` WHERE 
                 nomor_ortu IS NULL OR nomor_ortu = '' 
                 OR tempat_tanggal_lahir IS NULL OR tempat_tanggal_lahir = '' 
-                OR alamat_lengkap IS NULL OR alamat_lengkap = ''")->fetchColumn();
+                OR alamat_lengkap IS NULL OR alamat_lengkap = ''
+                OR nisn IS NULL OR nisn = ''
+                OR photo_path IS NULL OR photo_path = ''")->fetchColumn();
                 
             echo json_encode([
                 'success' => true,

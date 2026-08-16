@@ -26,7 +26,9 @@ function isComplete(s) {
   const noHp  = (s.nomor_ortu || '').trim();
   const ttl   = (s.tempat_tanggal_lahir || '').trim();
   const alamat = (s.alamat_lengkap || '').trim();
-  return noHp !== '' && ttl !== '' && alamat !== '';
+  const nisn = (s.nisn || '').trim();
+  const photo = (s.photo_path || '').trim();
+  return noHp !== '' && ttl !== '' && alamat !== '' && nisn !== '' && photo !== '';
 }
 
 // ── DOM REFS ─────────────────────────────────────────────────────────────
@@ -389,6 +391,8 @@ function renderCards() {
     if (!(student.nomor_ortu || '').trim()) missingFields.push('No. HP');
     if (!(student.tempat_tanggal_lahir || '').trim()) missingFields.push('TTL');
     if (!(student.alamat_lengkap || '').trim()) missingFields.push('Alamat');
+    if (!(student.nisn || '').trim()) missingFields.push('NISN');
+    if (!(student.photo_path || '').trim()) missingFields.push('Foto');
 
     const badgeHtml = !complete
       ? `<span class="incomplete-badge" title="Data belum lengkap: ${missingFields.join(', ')}">⚠ ${missingFields.join(' · ')}</span>`

@@ -137,7 +137,9 @@ try {
                         $kelasFolder = $m2[1];
                     }
                 }
-                $photoPath = "PAS_FOTO_SMPN_1_KEDUNGWARINGIN/{$kelasFolder}/" . strtoupper($nama) . ".webp";
+            }
+            if ($photoPath !== '' && !file_exists($photoPath)) {
+                $photoPath = '';
             }
 
             try {
