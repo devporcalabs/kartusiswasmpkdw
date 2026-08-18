@@ -61,8 +61,8 @@ require_once 'config.php';
         ?>
         <?php
         try {
-            $condDataComplete = "(nomor_ortu IS NOT NULL AND nomor_ortu != '' AND tempat_tanggal_lahir IS NOT NULL AND tempat_tanggal_lahir != '' AND alamat_lengkap IS NOT NULL AND alamat_lengkap != '' AND nisn IS NOT NULL AND nisn != '')";
-            $condDataIncomplete = "(nomor_ortu IS NULL OR nomor_ortu = '' OR tempat_tanggal_lahir IS NULL OR tempat_tanggal_lahir = '' OR alamat_lengkap IS NULL OR alamat_lengkap = '' OR nisn IS NULL OR nisn = '')";
+            $condDataComplete = "(tempat_tanggal_lahir IS NOT NULL AND tempat_tanggal_lahir != '' AND alamat_lengkap IS NOT NULL AND alamat_lengkap != '' AND nisn IS NOT NULL AND nisn != '')";
+            $condDataIncomplete = "(tempat_tanggal_lahir IS NULL OR tempat_tanggal_lahir = '' OR alamat_lengkap IS NULL OR alamat_lengkap = '' OR nisn IS NULL OR nisn = '')";
             $condHasPhoto = "(photo_path IS NOT NULL AND photo_path != '')";
             $condNoPhoto = "(photo_path IS NULL OR photo_path = '')";
 
