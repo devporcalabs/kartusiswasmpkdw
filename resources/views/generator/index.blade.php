@@ -243,5 +243,20 @@
 </div>
 
 <script src="/app.js"></script>
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const kelasParam = urlParams.get('kelas');
+    if (kelasParam) {
+      const filterSelect = document.getElementById('kelasFilter');
+      if (filterSelect) {
+        filterSelect.value = kelasParam;
+        if (typeof fetchStudents === 'function') {
+          fetchStudents();
+        }
+      }
+    }
+  });
+</script>
 </body>
 </html>

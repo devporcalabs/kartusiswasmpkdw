@@ -14,6 +14,28 @@ class ListStudents extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+            Actions\Action::make('cetak_kartu')
+                ->label('Cetak Kartu')
+                ->icon('heroicon-o-printer')
+                ->color('success')
+                ->form([
+                    \Filament\Forms\Components\Select::make('kelas')
+                        ->label('Pilih Kelas')
+                        ->options(
+                            \App\Models\Student::select('kelas')
+                                ->whereNotNull('kelas')
+                                ->where('kelas', '!=', '')
+                                ->distinct()
+                                ->orderBy('kelas', 'asc')
+                                ->pluck('kelas', 'kelas')
+                                ->toArray()
+                        )
+                        ->required(),
+                ])
+                ->action(function (array $data) {
+                    $kelas = $data['kelas'];
+                    return redirect()->to(url('/?kelas=' . urlencode($kelas)));
+                }),
         ];
     }
 }
