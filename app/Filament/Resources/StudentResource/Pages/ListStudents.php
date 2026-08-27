@@ -38,4 +38,9 @@ class ListStudents extends ListRecords
                 }),
         ];
     }
+
+    public function getMaxContentWidth(): string
+    {
+        return 'full';
+    }
 }
