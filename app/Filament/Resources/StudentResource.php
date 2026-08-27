@@ -167,19 +167,48 @@ class StudentResource extends Resource
                     ->label('Foto')
                     ->disk('public_dir')
                     ->square(),
-                Tables\Columns\TextColumn::make('nama_lengkap')
+                Tables\Columns\TextInputColumn::make('nama_lengkap')
                     ->label('Nama Lengkap')
                     ->searchable()
                     ->sortable()
-                    ->formatStateUsing(fn ($state) => strtoupper($state)),
-                Tables\Columns\TextColumn::make('nisn')
-                    ->label('NISN')
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('nis')
+                    ->rules(['required', 'string', 'max:255']),
+                Tables\Columns\TextInputColumn::make('nis')
                     ->label('NIS')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TextInputColumn::make('nisn')
+                    ->label('NISN')
+                    ->searchable()
+                    ->sortable()
+                    ->rules([
+                        'nullable',
+                        'string',
+                        'max:50',
+                        function ($record, $value, $fail) {
+                            if (!empty($value)) {
+                                $exists = \App\Models\Student::where('nisn', $value)
+                                    ->where('id', '!=', $record->id)
+                                    ->exists();
+                                if ($exists) {
+                                    $fail("NISN '{$value}' sudah digunakan oleh siswa lain.");
+                                }
+                            }
+                        }
+                    ]),
+                Tables\Columns\TextInputColumn::make('tempat_tanggal_lahir')
+                    ->label('Tempat Tanggal Lahir')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\SelectColumn::make('jenis_kelamin')
+                    ->label('Jenis Kelamin')
+                    ->options([
+                        'Laki-Laki' => 'Laki-Laki',
+                        'Perempuan' => 'Perempuan',
+                    ])
+                    ->sortable(),
+                Tables\Columns\TextInputColumn::make('alamat_lengkap')
+                    ->label('Alamat')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('kelas')
                     ->label('Kelas')
                     ->searchable()
