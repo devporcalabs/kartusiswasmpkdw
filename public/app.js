@@ -617,6 +617,19 @@ async function doExportZip(students) {
   const progressText = overlay.querySelector('#exportProgressText');
   const progressBar = overlay.querySelector('#exportProgressBar');
 
+  // Siapkan blob kartu belakang jika mode tampilkan sisi belakang aktif
+  let backBlob = null;
+  if (showBack) {
+    try {
+      const backRes = await fetch('/Kartu_Belakang.png');
+      if (backRes.ok) {
+        backBlob = await backRes.blob();
+      }
+    } catch (e) {
+      console.warn('Gagal memuat Kartu_Belakang.png:', e);
+    }
+  }
+
   const zip = new JSZip();
   const exportArea = document.createElement('div');
   exportArea.style.position = 'absolute';
@@ -660,20 +673,19 @@ async function doExportZip(students) {
 
       const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.95));
       const safeName = name.replace(/[^A-Z0-9]/gi, '_');
-      zip.file(`${safeName}_${nisn}.jpg`, blob);
+
+      if (showBack) {
+        // Jika mode sisi belakang aktif, buat 2 file untuk setiap siswa: DEPAN & BELAKANG
+        zip.file(`${safeName}_${nisn}_DEPAN.jpg`, blob);
+        if (backBlob) {
+          zip.file(`${safeName}_${nisn}_BELAKANG.png`, backBlob);
+        }
+      } else {
+        // Jika mode biasa, unduh hanya sisi depan
+        zip.file(`${safeName}_${nisn}.jpg`, blob);
+      }
 
       exportArea.removeChild(cardContainer);
-    }
-
-    // Sertakan juga gambar kartu belakang ke dalam file ZIP
-    try {
-      const backRes = await fetch('/Kartu_Belakang.png');
-      if (backRes.ok) {
-        const backBlob = await backRes.blob();
-        zip.file('00_KARTU_PELAJAR_BELAKANG.png', backBlob);
-      }
-    } catch (e) {
-      console.warn('Gagal menyertakan kartu belakang ke ZIP:', e);
     }
 
     progressText.textContent = "Mengompres file menjadi ZIP...";
