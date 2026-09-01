@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Kartu Belakang SMPN 1 Kedungwaringin</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .card-back {
+      display: block !important;
+      transform: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      margin: 0 !important;
+      width: 800px !important;
+      height: 504px !important;
+      background: #ffffff !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="card-back" id="cardBack">
+    <!-- Header -->
+    <div class="card-header">
+      <img src="Logo-KabBekasi.png" alt="Logo Kab Bekasi" class="card-header-logo" onerror="this.style.display='none'" />
+      <div class="card-header-text">
+        <div class="card-header-gov">PEMERINTAH KABUPATEN BEKASI</div>
+        <div class="card-header-dept">DINAS PENDIDIKAN</div>
+        <div class="card-header-school">SMP NEGERI 1 KEDUNGWARINGIN</div>
+        <div class="card-header-addr">Jl. Raya Kedungwaringin No. 2, Kedungwaringin, Bekasi 17540</div>
+      </div>
+      <img src="LogoSMPN1KDW.webp" alt="Logo SMPN 1 KDW" class="card-header-logo2" onerror="this.style.display='none'" />
+    </div>
+
+    <div class="card-back-body">
+      <div class="back-rules-title">KETENTUAN PENGGUNAAN KARTU</div>
+      <div class="back-content">
+        <div class="back-rules">
+          <ol>
+            <li>Kartu ini merupakan identitas resmi siswa dan wajib dibawa selama kegiatan sekolah.</li>
+            <li>Kartu tidak dapat dipindahtangankan atau digunakan oleh orang lain.</li>
+            <li>Kehilangan atau kerusakan kartu wajib segera dilaporkan kepada wali kelas.</li>
+            <li>Penggantian kartu yang hilang atau rusak dapat dikenakan biaya.</li>
+            <li>Kartu berlaku selama pemegang masih terdaftar sebagai siswa aktif.</li>
+            <li>Penyalahgunaan kartu akan dikenakan sanksi sesuai tata tertib sekolah.</li>
+            <li>Kartu digunakan untuk mengakses fasilitas dan layanan sekolah.</li>
+            <li>Kartu berfungsi sebagai kartu identitas dan absensi berbasis RFID.</li>
+          </ol>
+        </div>
+        <div class="back-contact">
+          <div class="back-contact-item">
+            <div class="back-contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            </div>
+            <div>
+              <div class="back-contact-label">NPSN</div>
+              <div class="back-contact-value">20218386</div>
+            </div>
+          </div>
+          <div class="back-contact-item">
+            <div class="back-contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.86-.86a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.56 16.92z"/></svg>
+            </div>
+            <div>
+              <div class="back-contact-label">Telepon</div>
+              <div class="back-contact-value">(021) 89140412</div>
+            </div>
+          </div>
+          <div class="back-contact-item">
+            <div class="back-contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <div>
+              <div class="back-contact-label">Website</div>
+              <div class="back-contact-value">www.smpn1kedungwaringin.sch.id</div>
+            </div>
+          </div>
+          <div class="back-contact-item">
+            <div class="back-contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <div class="back-contact-label">Email</div>
+              <div class="back-contact-value">ksmpnsatu@ymail.com</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="back-footer">
+        <div class="back-rfid-icon-wrap">
+          <img src="rfidicon.png" class="back-rfid-icon" alt="RFID" />
+        </div>
+        <div class="back-credit">
+          Jika menemukan kartu ini, mohon kembalikan ke:<br>
+          <strong>SMP NEGERI 1 KEDUNGWARINGIN</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('load', async () => {
+      await new Promise(r => setTimeout(r, 600));
+      const cardEl = document.getElementById('cardBack');
+      const canvas = await html2canvas(cardEl, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff'
+      });
+      const dataUrl = canvas.toDataURL('image/png');
+      await fetch('/save_card_back.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: dataUrl })
+      });
+      console.log("Card back saved successfully!");
+    });
+  </script>
+</body>
+</html>

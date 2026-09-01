@@ -665,6 +665,17 @@ async function doExportZip(students) {
       exportArea.removeChild(cardContainer);
     }
 
+    // Sertakan juga gambar kartu belakang ke dalam file ZIP
+    try {
+      const backRes = await fetch('/Kartu_Belakang.png');
+      if (backRes.ok) {
+        const backBlob = await backRes.blob();
+        zip.file('00_KARTU_PELAJAR_BELAKANG.png', backBlob);
+      }
+    } catch (e) {
+      console.warn('Gagal menyertakan kartu belakang ke ZIP:', e);
+    }
+
     progressText.textContent = "Mengompres file menjadi ZIP...";
     const zipBlob = await zip.generateAsync({ type: 'blob' });
 
@@ -698,3 +709,15 @@ btnPrintSelected.addEventListener('click', () => {
   if (sel.length === 0) { alert('Pilih minimal satu siswa!'); return; }
   doExportZip(sel);
 });
+
+const btnDownloadBack = document.getElementById('btnDownloadBack');
+if (btnDownloadBack) {
+  btnDownloadBack.addEventListener('click', () => {
+    const link = document.createElement('a');
+    link.href = '/Kartu_Belakang.png';
+    link.download = 'Kartu_Pelajar_SMPN1KDW_Belakang.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+}
