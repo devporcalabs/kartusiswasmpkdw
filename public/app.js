@@ -665,13 +665,13 @@ async function doExportZip(students) {
       await new Promise(resolve => setTimeout(resolve, 150));
 
       const canvas = await html2canvas(cardEl, {
-        scale: 2, // Menggunakan skala 2x untuk kualitas gambar cetak (HD)
+        scale: 3, // Menggunakan skala 3x untuk kualitas gambar cetak Ultra HD (300+ DPI)
         useCORS: true,
         logging: false,
         backgroundColor: null
       });
 
-      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.95));
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.98));
       const safeName = name.replace(/[^A-Z0-9]/gi, '_');
 
       if (showBack) {
