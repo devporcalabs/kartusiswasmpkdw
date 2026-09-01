@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Kartu Belakang SMPN 1 Kedungwaringin</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -12,12 +11,10 @@
     body {
       margin: 0;
       padding: 0;
-      background: #f0f2f5;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
+      background: transparent;
+      width: 800px;
+      height: 504px;
+      overflow: hidden;
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
     .card-back {
@@ -28,7 +25,7 @@
       margin: 0 !important;
       width: 800px !important;
       height: 504px !important;
-      background: #ffffff !important;
+      background: url('backgroundputih.png') no-repeat center/cover !important;
     }
   </style>
 </head>
@@ -41,7 +38,7 @@
         <div class="card-header-gov">PEMERINTAH KABUPATEN BEKASI</div>
         <div class="card-header-dept">DINAS PENDIDIKAN</div>
         <div class="card-header-school">SMP NEGERI 1 KEDUNGWARINGIN</div>
-        <div class="card-header-addr">Jl. Raya Kedungwaringin No. 2, Kedungwaringin, Bekasi 17540</div>
+        <div class="card-header-addr">Jl. Raya Kedungwaringin No.7A, Kab.Bekasi, Jawa Barat 17540</div>
       </div>
       <img src="LogoSMPN1KDW.webp" alt="Logo SMPN 1 KDW" class="card-header-logo2" onerror="this.style.display='none'" />
     </div>
@@ -68,7 +65,7 @@
             </div>
             <div>
               <div class="back-contact-label">NPSN</div>
-              <div class="back-contact-value">20218386</div>
+              <div class="back-contact-value">20228903</div>
             </div>
           </div>
           <div class="back-contact-item">
@@ -77,7 +74,7 @@
             </div>
             <div>
               <div class="back-contact-label">Telepon</div>
-              <div class="back-contact-value">(021) 89140412</div>
+              <div class="back-contact-value">(021) 1234567</div>
             </div>
           </div>
           <div class="back-contact-item">
@@ -86,7 +83,7 @@
             </div>
             <div>
               <div class="back-contact-label">Website</div>
-              <div class="back-contact-value">www.smpn1kedungwaringin.sch.id</div>
+              <div class="back-contact-value">smpn1kedungwaringin.sch.id</div>
             </div>
           </div>
           <div class="back-contact-item">
@@ -106,30 +103,11 @@
           <img src="rfidicon.png" class="back-rfid-icon" alt="RFID" />
         </div>
         <div class="back-credit">
-          Jika menemukan kartu ini, mohon kembalikan ke:<br>
-          <strong>SMP NEGERI 1 KEDUNGWARINGIN</strong>
+          Kartu Pelajar<br>
+          SMPN 1 Kedungwaringin
         </div>
       </div>
     </div>
   </div>
-
-  <script>
-    window.addEventListener('load', async () => {
-      await new Promise(r => setTimeout(r, 600));
-      const cardEl = document.getElementById('cardBack');
-      const canvas = await html2canvas(cardEl, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#ffffff'
-      });
-      const dataUrl = canvas.toDataURL('image/png');
-      await fetch('/save_card_back.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: dataUrl })
-      });
-      console.log("Card back saved successfully!");
-    });
-  </script>
 </body>
 </html>

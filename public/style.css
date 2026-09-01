@@ -511,36 +511,38 @@ body {
 }
 
 .card-header-gov {
-  font-size: 32px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 700;
   color: var(--white);
-  letter-spacing: .5px;
+  letter-spacing: .8px;
   text-transform: uppercase;
-  line-height: 1.0;
+  line-height: 1.15;
 }
 
 .card-header-dept {
-  font-size: 32px;
-  font-weight: 700;
+  font-size: 22px;
+  font-weight: 800;
   color: var(--white);
-  letter-spacing: .5px;
-  line-height: 1.0;
+  letter-spacing: .8px;
+  line-height: 1.15;
 }
 
 .card-header-school {
-  font-size: 32px;
+  font-size: 26px;
   font-weight: 900;
   color: var(--white);
   letter-spacing: .5px;
-  line-height: 1.05;
+  line-height: 1.15;
   text-shadow: 0 2px 8px rgba(0, 0, 0, .3);
 }
 
 .card-header-addr {
-  font-size: 12px;
+  font-size: 13.5px;
   color: var(--white);
-  margin-top: 2px;
-  line-height: 1.0;
+  margin-top: 4px;
+  line-height: 1.2;
+  font-weight: 500;
+  opacity: 0.95;
 }
 
 .card-header-logo2 {
@@ -879,8 +881,9 @@ body {
   display: flex;
   flex-direction: column;
   height: calc(var(--card-h) - 148px);
-  padding: 16px 24px 12px;
-  gap: 12px;
+  padding: 12px 24px 18px;
+  gap: 8px;
+  justify-content: space-between;
 }
 
 .back-rules-title {
@@ -909,13 +912,13 @@ body {
   color: var(--gray-800);
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  margin-top: 8px;
+  gap: 4px;
+  margin-top: 6px;
   font-weight: 500;
 }
 
 .back-rules li {
-  line-height: 1.5;
+  line-height: 1.45;
 }
 
 .back-contact {
@@ -924,7 +927,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .back-contact-item {
@@ -934,8 +937,8 @@ body {
 }
 
 .back-contact-icon {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: var(--blue-pale);
   display: flex;
@@ -968,17 +971,17 @@ body {
   justify-content: space-between;
   align-items: flex-end;
   border-top: 1px solid var(--gray-200);
-  padding-top: 8px;
+  padding-top: 4px;
 }
 
 .back-rfid-icon-wrap {
-  height: 44px;
+  height: 36px;
   display: flex;
   align-items: center;
 }
 
 .back-rfid-icon {
-  max-height: 36px;
+  max-height: 32px;
   width: auto;
   object-fit: contain;
 }
